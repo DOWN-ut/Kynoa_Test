@@ -99,7 +99,11 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  offset: {x: 1.25, y: 2.5}
+  offset: {x: 2, y: 4}
+  wallY: 10
+  cameraTransform: {fileID: 4982587526726481695}
+  cameraAngle: 30
+  cameraWallAngle: 90
 --- !u!1 &1697960889051638437
 GameObject:
   m_ObjectHideFlags: 0

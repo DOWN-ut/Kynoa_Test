@@ -4,7 +4,7 @@ public class PlayerCamera : MonoBehaviour
 {
     [SerializeField] PlayerManager playerManager;
 
-    [SerializeField] Transform follow;
+    [SerializeField] Transform follow; PlayerCharacter FollowPlayerCharacter { get { return follow.GetComponent<PlayerCharacter>(); } }
     [SerializeField] float moveSpeed = 1.0f;
     [SerializeField] float moveRange = 1f;
     [SerializeField] AnimationCurve moveCurve;
@@ -13,6 +13,7 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] AnimationCurve rotateCurve;
 
     [SerializeField] Vector2 offset;
+    [SerializeField] float wallY;
 
     public void Setup()
     {
@@ -21,7 +22,7 @@ public class PlayerCamera : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector3 pos = follow.position - (transform.forward * offset.x) + (transform.up * offset.y);
+        Vector3 pos = follow.position - (transform.forward * offset.x) + (transform.up * offset.y); //(transform.up * (FollowPlayerCharacter.NearWall ? wallY : offset.y));
         float posR = Mathf.Clamp(Vector3.Distance(pos, transform.position) / moveRange, 0, 1);
         transform.position = Vector3.MoveTowards(transform.position,pos, moveSpeed * moveCurve.Evaluate(posR));
 

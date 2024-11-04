@@ -48,7 +48,7 @@ public class ArenaGoal : NetworkBehaviour
     {
         ball.transform.position = Vector3.MoveTowards(ball.transform.position, transform.position + (Vector3.up * animateHeight), animateSpeed * Time.deltaTime);
     
-        return Vector3.Distance(ball.transform.position , transform.position + (Vector3.up * animateHeight)) < 0.1f;
+        return Mathf.Abs((ball.transform.position - (transform.position + (Vector3.up * animateHeight))).y) < 0.1f;
     }
 
     void OnBallTrigger(GameObject b)

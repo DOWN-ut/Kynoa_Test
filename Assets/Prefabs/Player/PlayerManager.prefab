@@ -71,8 +71,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4db24d1c8e8022f41a05a7b1ae26f577, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   playerCharacter: {fileID: 8194531434264352026}
   playerCamera: {fileID: 6189091931333911723}
+  positionInterpolationSpeed: 10
 --- !u!1001 &638516012478891509
 PrefabInstance:
   m_ObjectHideFlags: 0

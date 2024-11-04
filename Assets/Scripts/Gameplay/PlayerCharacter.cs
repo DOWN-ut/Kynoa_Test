@@ -14,6 +14,8 @@ public class PlayerCharacter : MonoBehaviour
     public int TeamId { get; private set; }
     public PlayerManager PlayerManager { get; private set; }
 
+    public bool NearWall { get { return TeamId == 0 ? (transform.position.x > ArenaManager.Instance.ArenaSize.x - 2) : (transform.position.x < ArenaManager.Instance.ArenaSize.x + 2); } }
+
     private void Start()
     {
         Rigidbody = GetComponent<Rigidbody>();

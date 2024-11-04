@@ -1,12 +1,15 @@
 using UnityEngine;
 using Unity.Netcode;
 using TMPro;
+using Unity.Netcode.Transports.UTP;
 
 public class UIManager : MonoBehaviour
 {
     [SerializeField] RectTransform connectionUI;
+    [SerializeField] TMP_Text broadcastReceiveText;
 
     [SerializeField] RectTransform serverUI;
+    [SerializeField] TMP_Text ipDisplay;
     [SerializeField] TMP_Text serverPlayerCount;
     [SerializeField] TMP_Text serverWaiting;
 
@@ -16,12 +19,17 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] RectTransform loadingScreen;
 
+    [SerializeField] RectTransform welcomeScreen;
+
+    [SerializeField] float loadingMinDuration; float loadingD;
+
     void Update()
     {
         ManageConnectionUI();
         ManageServerUI();
         ManageScoreUI();
-        ManageLoadingScreen(); 
+        ManageLoadingScreen();
+        ManageWelcomeUI();
     }
 
     void ManageLoadingScreen()
@@ -32,8 +40,14 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            loadingScreen.gameObject.SetActive(!NetworkConnection.Instance.ServerReady);
+            loadingScreen.gameObject.SetActive(!NetworkConnection.Instance.ServerReady || loadingD > 0);
         }
+        loadingD -= Time.deltaTime;
+    }
+
+    void BringLoadingScreen()
+    {
+        loadingD = loadingMinDuration;
     }
 
     void ManageScoreUI()
@@ -54,10 +68,13 @@ public class UIManager : MonoBehaviour
             {
                 serverPlayerCount.gameObject.SetActive(false);
                 serverWaiting.gameObject.SetActive(false);
+                ipDisplay.gameObject.SetActive(false);
             }
             else
             {
                 serverPlayerCount.text = NetworkManager.Singleton.ConnectedClients.Count.ToString();
+                ipDisplay.text = NetworkConnection.Instance.LocalIPAddress;
+                ipDisplay.gameObject.SetActive(true);
                 serverPlayerCount.gameObject.SetActive(true);
                 serverWaiting.gameObject.SetActive(true);
             }
@@ -75,8 +92,27 @@ public class UIManager : MonoBehaviour
             connectionUI.gameObject.SetActive(false);
         }
         else
-        {
+        { 
+            UnityTransport up = NetworkManager.Singleton.GetComponent<UnityTransport>();
             connectionUI.gameObject.SetActive(true);
+            broadcastReceiveText.text = NetworkConnection.Instance.ClientReceivedServerIP ? 
+                ("Server found at : " + up.ConnectionData.Address + ":" + up.ConnectionData.Port) : 
+                "Waiting for server ...";
         }
+    }
+
+    void ManageWelcomeUI()
+    {
+        if (NetworkManager.Singleton.IsServer)
+        {
+            welcomeScreen.gameObject.SetActive(false);
+        }
+    }
+
+    public void ValidateWelcomeScreen()
+    {
+        loadingD = loadingMinDuration;
+        welcomeScreen.gameObject.SetActive(false);
+        NetworkConnection.Instance.ClientReady = true;
     }
 }
