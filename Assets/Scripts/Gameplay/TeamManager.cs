@@ -45,6 +45,16 @@ public class TeamManager : NetworkBehaviour
         teamList[teamId].AddScore(amount);
     }
 
+    public Transform GetBowlPoint(int teamId)
+    {
+        if (teamId < 0 || teamId >= teamList.Count)
+        {
+            Debug.LogError("Team ID out of range");
+            return null;
+        }
+        return teamList[teamId].BowlPoint;
+    }
+
     public int GetTeamScore(int teamId)
     {
         if (teamId < 0 || teamId >= teamList.Count)
@@ -75,6 +85,7 @@ public class TeamManager : NetworkBehaviour
         [SerializeField] string name; public string Name { get => name; }
         [SerializeField] Color color; public Color Color { get=>color; }
         [SerializeField] Transform spawnPoint; public Transform SpawnPoint { get => spawnPoint; }
+        [SerializeField] Transform bowlPoint; public Transform BowlPoint { get => bowlPoint; }
         public int Score { get; private set; }
 
         public void Setup(int id) { Id = id; }

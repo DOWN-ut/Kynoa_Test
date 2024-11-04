@@ -36,6 +36,8 @@ public class ArenaGoal : NetworkBehaviour
         {
             if (AnimateBall())
             {
+                ball.transform.position = TeamManager.Instance.GetBowlPoint(team).position;
+                ball.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
                 GameManager.Instance.RespawnBall();
                 ball = null;
             }
@@ -63,7 +65,7 @@ public class ArenaGoal : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (IsServer)
+        if (IsServer && ball == null)
         {
             if (other.CompareTag("Ball"))
             {

@@ -8,16 +8,32 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] RectTransform serverUI;
     [SerializeField] TMP_Text serverPlayerCount;
+    [SerializeField] TMP_Text serverWaiting;
 
     [SerializeField] RectTransform scoreUI;
     [SerializeField] TMP_Text team1Score;
     [SerializeField] TMP_Text team2Score;
+
+    [SerializeField] RectTransform loadingScreen;
 
     void Update()
     {
         ManageConnectionUI();
         ManageServerUI();
         ManageScoreUI();
+        ManageLoadingScreen(); 
+    }
+
+    void ManageLoadingScreen()
+    {
+        if(!NetworkManager.Singleton.IsConnectedClient)
+        {
+            loadingScreen.gameObject.SetActive(false);
+        }
+        else
+        {
+            loadingScreen.gameObject.SetActive(!NetworkConnection.Instance.ServerReady);
+        }
     }
 
     void ManageScoreUI()
@@ -34,8 +50,17 @@ public class UIManager : MonoBehaviour
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            serverUI.gameObject.SetActive(true);
-            serverPlayerCount.text = NetworkManager.Singleton.ConnectedClients.Count.ToString();
+            if (NetworkConnection.Instance.ServerReady)
+            {
+                serverPlayerCount.gameObject.SetActive(false);
+                serverWaiting.gameObject.SetActive(false);
+            }
+            else
+            {
+                serverPlayerCount.text = NetworkManager.Singleton.ConnectedClients.Count.ToString();
+                serverPlayerCount.gameObject.SetActive(true);
+                serverWaiting.gameObject.SetActive(true);
+            }
         }
         else
         {

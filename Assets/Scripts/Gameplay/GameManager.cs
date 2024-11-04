@@ -23,8 +23,7 @@ public class GameManager : NetworkBehaviour
 
     public void RespawnBall()
     {
-        CurrentBall.transform.position = ballSpawnPoint.position;
-        CurrentBall.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        SpawnBall();
     }
 
     private void Update()
