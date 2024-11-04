@@ -38,6 +38,8 @@ public class PlayerCharacter : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(PlayerManager == null) { return; }
+
         if (PlayerManager.IsOwner || PlayerManager.IsServer)
         {
             Movement();

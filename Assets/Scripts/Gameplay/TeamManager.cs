@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class TeamManager : MonoBehaviour
+public class TeamManager : NetworkBehaviour
 {
     [SerializeField] List<Team> teamList = new List<Team>();
 
@@ -12,6 +13,7 @@ public class TeamManager : MonoBehaviour
 
         SetupTeams();
     }
+
 
     void SetupTeams()
     {
@@ -29,6 +31,29 @@ public class TeamManager : MonoBehaviour
             return Color.white;
         }
         return teamList[teamId].Color;
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void AddScoreRpc(int teamId, int amount = 1)
+    {
+        if (teamId < 0 || teamId >= teamList.Count)
+        {
+            Debug.LogError("Team ID out of range");
+            return;
+        }
+
+        teamList[teamId].AddScore(amount);
+    }
+
+    public int GetTeamScore(int teamId)
+    {
+        if (teamId < 0 || teamId >= teamList.Count)
+        {
+            Debug.LogError("Team ID out of range");
+            return 0;
+        }
+
+        return teamList[teamId].Score;
     }
 
     public void JoinTeam(int teamId, GameObject obj)

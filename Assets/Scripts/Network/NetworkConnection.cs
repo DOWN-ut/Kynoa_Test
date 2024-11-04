@@ -9,6 +9,11 @@ public class NetworkConnection : MonoBehaviour
     public int PlayerCount { get { return networkManager.ConnectedClientsList.Count; } }
     public bool ServerReady { get { return PlayerCount >= 2; } }
 
+    void Awake()
+    {
+        Instance = this;
+    }
+
     void Start()
     {
         if (MultiplayerRolesManager.ActiveMultiplayerRoleMask == MultiplayerRoleFlags.Server)
@@ -34,4 +39,6 @@ public class NetworkConnection : MonoBehaviour
                 break;
         }
     }
+
+    public static NetworkConnection Instance { get; private set; }
 }

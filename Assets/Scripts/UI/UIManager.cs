@@ -9,10 +9,25 @@ public class UIManager : MonoBehaviour
     [SerializeField] RectTransform serverUI;
     [SerializeField] TMP_Text serverPlayerCount;
 
+    [SerializeField] RectTransform scoreUI;
+    [SerializeField] TMP_Text team1Score;
+    [SerializeField] TMP_Text team2Score;
+
     void Update()
     {
         ManageConnectionUI();
         ManageServerUI();
+        ManageScoreUI();
+    }
+
+    void ManageScoreUI()
+    {
+        scoreUI.gameObject.SetActive(NetworkConnection.Instance.ServerReady);
+
+        team1Score.text = TeamManager.Instance.GetTeamScore(0).ToString();
+        team1Score.color = TeamManager.Instance.GetTeamColor(0);
+        team2Score.text = TeamManager.Instance.GetTeamScore(1).ToString();
+        team2Score.color = TeamManager.Instance.GetTeamColor(1);
     }
 
     void ManageServerUI()
